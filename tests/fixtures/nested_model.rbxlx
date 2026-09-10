@@ -1,0 +1,29 @@
+<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
+	<Item class="Workspace" referent="RBX_WS">
+		<Properties>
+			<string name="Name"><![CDATA[Workspace]]></string>
+		</Properties>
+		<Item class="Folder" referent="RBX_MAP">
+			<Properties>
+				<string name="Name"><![CDATA[Map]]></string>
+			</Properties>
+			<Item class="Model" referent="RBX_HOUSE">
+				<Properties>
+					<string name="Name"><![CDATA[House]]></string>
+				</Properties>
+				<Item class="Part" referent="RBX_DOOR">
+					<Properties>
+						<string name="Name"><![CDATA[Door]]></string>
+						<bool name="Anchored">true</bool>
+					</Properties>
+				</Item>
+				<Item class="Part" referent="RBX_WINDOW">
+					<Properties>
+						<string name="Name"><![CDATA[Window]]></string>
+						<float name="Transparency">0.5</float>
+					</Properties>
+				</Item>
+			</Item>
+		</Item>
+	</Item>
+</roblox>

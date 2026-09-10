@@ -1,0 +1,64 @@
+<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
+	<Item class="ServerScriptService" referent="RBX_SSS">
+		<Properties>
+			<string name="Name"><![CDATA[ServerScriptService]]></string>
+		</Properties>
+		<Item class="Script" referent="RBX_SCRIPT1">
+			<Properties>
+				<string name="Name"><![CDATA[Main]]></string>
+				<ProtectedString name="Source"><![CDATA[print("Server running")]]></ProtectedString>
+			</Properties>
+		</Item>
+		<Item class="Script" referent="RBX_SCRIPT_WITH_CHILD">
+			<Properties>
+				<string name="Name"><![CDATA[GunManager]]></string>
+				<ProtectedString name="Source"><![CDATA[print("Gun manager active")]]></ProtectedString>
+			</Properties>
+			<Item class="NumberValue" referent="RBX_VAL1">
+				<Properties>
+					<string name="Name"><![CDATA[AmmoConfig]]></string>
+					<double name="Value">30</double>
+				</Properties>
+			</Item>
+			<Item class="RemoteEvent" referent="RBX_RE1">
+				<Properties>
+					<string name="Name"><![CDATA[ReloadEvent]]></string>
+				</Properties>
+			</Item>
+		</Item>
+	</Item>
+	<Item class="StarterPlayer" referent="RBX_SP">
+		<Properties>
+			<string name="Name"><![CDATA[StarterPlayer]]></string>
+		</Properties>
+		<Item class="StarterPlayerScripts" referent="RBX_SPS">
+			<Properties>
+				<string name="Name"><![CDATA[StarterPlayerScripts]]></string>
+			</Properties>
+			<Item class="LocalScript" referent="RBX_LOC1">
+				<Properties>
+					<string name="Name"><![CDATA[ClientHandler]]></string>
+					<ProtectedString name="Source"><![CDATA[print("Client running")]]></ProtectedString>
+				</Properties>
+			</Item>
+		</Item>
+	</Item>
+	<Item class="ReplicatedStorage" referent="RBX_RS">
+		<Properties>
+			<string name="Name"><![CDATA[ReplicatedStorage]]></string>
+		</Properties>
+		<Item class="Folder" referent="RBX_MODS">
+			<Properties>
+				<string name="Name"><![CDATA[Modules]]></string>
+			</Properties>
+			<Item class="ModuleScript" referent="RBX_MOD1">
+				<Properties>
+					<string name="Name"><![CDATA[MathUtils]]></string>
+					<ProtectedString name="Source"><![CDATA[local M = {}
+function M.add(a, b) return a + b end
+return M]]></ProtectedString>
+				</Properties>
+			</Item>
+		</Item>
+	</Item>
+</roblox>

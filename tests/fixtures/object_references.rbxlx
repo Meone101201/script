@@ -1,0 +1,36 @@
+<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
+	<Item class="Workspace" referent="RBX_WS">
+		<Properties>
+			<string name="Name"><![CDATA[Workspace]]></string>
+		</Properties>
+		<Item class="Model" referent="RBX_CAR">
+			<Properties>
+				<string name="Name"><![CDATA[Car]]></string>
+				<Ref name="PrimaryPart">RBX_BODY</Ref>
+			</Properties>
+			<Item class="Part" referent="RBX_BODY">
+				<Properties>
+					<string name="Name"><![CDATA[Body]]></string>
+				</Properties>
+			</Item>
+		</Item>
+		<Item class="ObjectValue" referent="RBX_TARGET_VAL">
+			<Properties>
+				<string name="Name"><![CDATA[TargetValue]]></string>
+				<Ref name="Value">RBX_BODY</Ref>
+			</Properties>
+		</Item>
+		<Item class="ObjectValue" referent="RBX_BROKEN_VAL">
+			<Properties>
+				<string name="Name"><![CDATA[BrokenTarget]]></string>
+				<Ref name="Value">RBX_NONEXISTENT_GHOST</Ref>
+			</Properties>
+		</Item>
+		<Item class="Part" referent="RBX_NULL_REF">
+			<Properties>
+				<string name="Name"><![CDATA[NullRefPart]]></string>
+				<Ref name="PrimaryPart">null</Ref>
+			</Properties>
+		</Item>
+	</Item>
+</roblox>

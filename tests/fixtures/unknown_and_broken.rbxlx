@@ -1,0 +1,17 @@
+<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
+	<Item class="Workspace" referent="RBX_WS">
+		<Properties>
+			<string name="Name"><![CDATA[Workspace]]></string>
+		</Properties>
+		<Item class="FutureRobloxSuperEngine" referent="RBX_UNKNOWN_CLASS">
+			<Properties>
+				<string name="Name"><![CDATA[ExperimentalGizmo]]></string>
+				<QuantumField name="FluxDensity">
+					<Level>42.0</Level>
+					<State>Active</State>
+				</QuantumField>
+				<Ref name="MissingAnchor">RBX_DOES_NOT_EXIST</Ref>
+			</Properties>
+		</Item>
+	</Item>
+</roblox>

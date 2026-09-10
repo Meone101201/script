@@ -1,0 +1,15 @@
+<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
+	<Meta name="ExplicitAutoJoints">true</Meta>
+	<Item class="Workspace" referent="RBX_WS">
+		<Properties>
+			<string name="Name"><![CDATA[Workspace]]></string>
+			<bool name="Archivable">true</bool>
+		</Properties>
+	</Item>
+	<Item class="Lighting" referent="RBX_LIGHT">
+		<Properties>
+			<string name="Name"><![CDATA[Lighting]]></string>
+			<float name="Brightness">2</float>
+		</Properties>
+	</Item>
+</roblox>

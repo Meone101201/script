@@ -1,0 +1,30 @@
+<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
+	<Item class="Workspace" referent="RBX_WS">
+		<Properties>
+			<string name="Name"><![CDATA[Workspace]]></string>
+		</Properties>
+		<Item class="Part" referent="RBX_PART1">
+			<Properties>
+				<string name="Name"><![CDATA[BasePlate]]></string>
+				<bool name="Anchored">true</bool>
+				<bool name="CanCollide">true</bool>
+				<float name="Transparency">0</float>
+				<Vector3 name="Size">
+					<X>512</X>
+					<Y>20</Y>
+					<Z>512</Z>
+				</Vector3>
+				<Vector3 name="Position">
+					<X>0</X>
+					<Y>-10</Y>
+					<Z>0</Z>
+				</Vector3>
+				<Color3 name="Color">
+					<R>0.3882353</R>
+					<G>0.372549</G>
+					<B>0.3843137</B>
+				</Color3>
+			</Properties>
+		</Item>
+	</Item>
+</roblox>

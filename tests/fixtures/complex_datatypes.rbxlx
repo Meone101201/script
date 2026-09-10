@@ -1,0 +1,87 @@
+<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
+	<Item class="Workspace" referent="RBX_WS">
+		<Properties>
+			<string name="Name"><![CDATA[Workspace]]></string>
+		</Properties>
+		<Item class="Part" referent="RBX_COMPLEX_PART">
+			<Properties>
+				<string name="Name"><![CDATA[ComplexPart]]></string>
+				<bool name="Anchored">true</bool>
+				<int name="RootPriority">10</int>
+				<int64 name="SourceAssetId">9876543210</int64>
+				<float name="Transparency">0.25</float>
+				<double name="Elasticity">0.75</double>
+				<token name="Shape">1</token>
+				<Vector2 name="CustomVector2">
+					<X>10.5</X>
+					<Y>20.5</Y>
+				</Vector2>
+				<Vector3 name="Size">
+					<X>4</X>
+					<Y>1</Y>
+					<Z>4</Z>
+				</Vector3>
+				<CoordinateFrame name="CFrame">
+					<X>0</X>
+					<Y>5</Y>
+					<Z>0</Z>
+					<R00>1</R00>
+					<R01>0</R01>
+					<R02>0</R02>
+					<R10>0</R10>
+					<R11>1</R11>
+					<R12>0</R12>
+					<R20>0</R20>
+					<R21>0</R21>
+					<R22>1</R22>
+				</CoordinateFrame>
+				<Color3 name="Color">
+					<R>1</R>
+					<G>0.5</G>
+					<B>0</B>
+				</Color3>
+				<Color3uint8 name="Color3uint8">4286611584</Color3uint8>
+				<UDim name="CustomUDim">
+					<S>0.5</S>
+					<O>100</O>
+				</UDim>
+				<UDim2 name="CustomUDim2">
+					<XS>0.5</XS>
+					<XO>10</XO>
+					<YS>0.25</YS>
+					<YO>20</YO>
+				</UDim2>
+				<NumberRange name="CustomRange">5 50</NumberRange>
+				<NumberSequence name="CustomNumberSeq">0 1 0 0.5 0.5 0.1 1 0 0</NumberSequence>
+				<ColorSequence name="CustomColorSeq">0 1 0 0 0 1 0 0 1 0</ColorSequence>
+				<Rect2D name="CustomRect">
+					<min>
+						<X>10</X>
+						<Y>20</Y>
+					</min>
+					<max>
+						<X>100</X>
+						<Y>200</Y>
+					</max>
+				</Rect2D>
+				<Font name="CustomFont">
+					<Family><url>rbxasset://fonts/families/BuilderSans.json</url></Family>
+					<Weight>700</Weight>
+					<Style>Normal</Style>
+				</Font>
+				<PhysicalProperties name="CustomPhysics">
+					<CustomPhysics>true</CustomPhysics>
+					<Density>0.8</Density>
+					<Friction>0.4</Friction>
+					<Elasticity>0.6</Elasticity>
+					<FrictionWeight>1</FrictionWeight>
+					<ElasticityWeight>1</ElasticityWeight>
+				</PhysicalProperties>
+				<Content name="TextureID">
+					<url>rbxassetid://1337420</url>
+				</Content>
+				<BinaryString name="Tags"><![CDATA[PlayerSpawn	SafeZone]]></BinaryString>
+			</Properties>
+		</Item>
+	</Item>
+</roblox>

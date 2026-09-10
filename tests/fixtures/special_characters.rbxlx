@@ -1,0 +1,27 @@
+<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
+	<Item class="Workspace" referent="RBX_WS">
+		<Properties>
+			<string name="Name"><![CDATA[Workspace]]></string>
+		</Properties>
+		<Item class="Part" referent="RBX_CON">
+			<Properties>
+				<string name="Name"><![CDATA[CON]]></string>
+			</Properties>
+		</Item>
+		<Item class="Part" referent="RBX_NUL">
+			<Properties>
+				<string name="Name"><![CDATA[NUL]]></string>
+			</Properties>
+		</Item>
+		<Item class="Part" referent="RBX_SPECIAL">
+			<Properties>
+				<string name="Name"><![CDATA[Door:Front/Left*1?2"3<4>5|6]]></string>
+			</Properties>
+		</Item>
+		<Item class="Part" referent="RBX_TRAILING">
+			<Properties>
+				<string name="Name"><![CDATA[Spacing Test...   ]]></string>
+			</Properties>
+		</Item>
+	</Item>
+</roblox>

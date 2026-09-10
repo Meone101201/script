@@ -1,0 +1,34 @@
+<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
+	<Item class="Workspace" referent="RBX_WS">
+		<Properties>
+			<string name="Name"><![CDATA[Workspace]]></string>
+		</Properties>
+		<Item class="Part" referent="RBX_P1">
+			<Properties>
+				<string name="Name"><![CDATA[Part]]></string>
+			</Properties>
+		</Item>
+		<Item class="Part" referent="RBX_P2">
+			<Properties>
+				<string name="Name"><![CDATA[Part]]></string>
+			</Properties>
+		</Item>
+		<Item class="Part" referent="RBX_P3">
+			<Properties>
+				<string name="Name"><![CDATA[Part]]></string>
+			</Properties>
+		</Item>
+		<Item class="Script" referent="RBX_S1">
+			<Properties>
+				<string name="Name"><![CDATA[Handler]]></string>
+				<ProtectedString name="Source"><![CDATA[print("First Handler")]]></ProtectedString>
+			</Properties>
+		</Item>
+		<Item class="Script" referent="RBX_S2">
+			<Properties>
+				<string name="Name"><![CDATA[Handler]]></string>
+				<ProtectedString name="Source"><![CDATA[print("Second Handler")]]></ProtectedString>
+			</Properties>
+		</Item>
+	</Item>
+</roblox>

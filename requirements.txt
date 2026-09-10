@@ -1,0 +1,3 @@
+# Core extractor uses only Python standard library (3.10+)
+# Development & testing:
+pytest>=7.0.0
