@@ -188,6 +188,30 @@ class PhysicalProperties:
 
 
 @dataclass
+class Faces:
+    mask: int
+    faces: List[str]
+
+    def to_json(self) -> Dict[str, Any]:
+        return {
+            "mask": self.mask,
+            "faces": self.faces,
+        }
+
+
+@dataclass
+class Axes:
+    mask: int
+    axes: List[str]
+
+    def to_json(self) -> Dict[str, Any]:
+        return {
+            "mask": self.mask,
+            "axes": self.axes,
+        }
+
+
+@dataclass
 class ObjectReference:
     referent: str
     target_path: Optional[str] = None

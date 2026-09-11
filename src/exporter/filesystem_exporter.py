@@ -22,6 +22,7 @@ class FilesystemExporter:
         include_properties: bool = True,
         pretty: bool = False,
         rojo_style: bool = False,
+        mode: str = "full",  # "full" or "simple"
     ):
         self.logger = logger
         self.output_dir = os.path.abspath(output_dir)
@@ -29,31 +30,55 @@ class FilesystemExporter:
         self.include_properties = include_properties
         self.pretty = pretty
         self.rojo_style = rojo_style
+        self.mode = mode.lower() if mode else "full"
 
         self.script_exporter = ScriptExporter(logger=self.logger)
         self.metadata_exporter = MetadataExporter(
             logger=self.logger, pretty=self.pretty, include_properties=self.include_properties
         )
         self.exported_instances_summary: List[Dict[str, Any]] = []
+        self._script_cache: Dict[str, bool] = {}
+
+    def _has_scripts(self, inst: RobloxInstance) -> bool:
+        """Recursively checks if instance is a script or contains scripts."""
+        if inst.referent in self._script_cache:
+            return self._script_cache[inst.referent]
+
+        if inst.is_script():
+            self._script_cache[inst.referent] = True
+            return True
+
+        has_child_script = any(self._has_scripts(c) for c in inst.children)
+        self._script_cache[inst.referent] = has_child_script
+        return has_child_script
 
     def export_tree(self, root: RobloxInstance) -> List[ExportedScriptInfo]:
         """
-        Exports the entire Roblox Instance tree to the filesystem.
+        Exports the Roblox Instance tree to the filesystem.
         Root is assumed to be DataModel whose direct children are Roblox Services.
         """
-        self.logger.info(f"Exporting Roblox Instance Tree to '{self.output_dir}'...", prefix="EXPORTER")
+        mode_label = "Simple (Scripts only)" if self.mode == "simple" else "Full (Original Structure + Metadata)"
+        self.logger.info(f"Exporting Roblox Instance Tree [{mode_label}] to '{self.output_dir}'...", prefix="EXPORTER")
         os.makedirs(self.output_dir, exist_ok=True)
 
         service_collision_resolver = SiblingCollisionResolver()
 
         for service in root.children:
+            if self.mode == "simple" and not self._has_scripts(service):
+                # Skip services with no scripts in simple mode
+                continue
+
             service_fs_name = service_collision_resolver.get_unique_name(service.name)
             service.filesystem_name = service_fs_name
             service_dir = os.path.join(self.output_dir, service_fs_name)
             service.filesystem_path = service_dir
 
-            # Export service metadata
-            self.metadata_exporter.export_metadata(service, service_dir)
+            if self.mode != "simple":
+                # Export service metadata in full mode
+                self.metadata_exporter.export_metadata(service, service_dir)
+            else:
+                os.makedirs(ensure_extended_path(service_dir), exist_ok=True)
+
             self._record_instance_summary(service, service_dir)
 
             # Export service children
@@ -106,8 +131,10 @@ class FilesystemExporter:
                 rel_path = os.path.relpath(script_file_path, self.output_dir)
                 self.script_exporter.export_script(child, script_file_path, rel_path)
 
-                # Export metadata for the script instance
-                self.metadata_exporter.export_metadata(child, script_dir)
+                if self.mode != "simple":
+                    # Export metadata for the script instance in full mode
+                    self.metadata_exporter.export_metadata(child, script_dir)
+
                 self._record_instance_summary(child, script_dir)
 
                 # Export its child instances
@@ -115,19 +142,34 @@ class FilesystemExporter:
 
             else:
                 # Non-script instance (Part, Model, Folder, Value, Gui, etc.)
-                folder_name = collision_resolver.get_unique_name(child.name)
-                child.filesystem_name = folder_name
-                inst_dir = os.path.join(parent_dir, folder_name)
-                child.filesystem_path = inst_dir
-                os.makedirs(ensure_extended_path(inst_dir), exist_ok=True)
+                if self.mode == "simple":
+                    if not self._has_scripts(child):
+                        # In simple mode, skip non-script instances that contain no scripts
+                        continue
 
-                # Export instance.json
-                self.metadata_exporter.export_metadata(child, inst_dir)
-                self._record_instance_summary(child, inst_dir)
+                    # Has scripts inside: create container directory without instance.json
+                    folder_name = collision_resolver.get_unique_name(child.name)
+                    child.filesystem_name = folder_name
+                    inst_dir = os.path.join(parent_dir, folder_name)
+                    child.filesystem_path = inst_dir
+                    os.makedirs(ensure_extended_path(inst_dir), exist_ok=True)
+                    self._record_instance_summary(child, inst_dir)
+                    if has_children:
+                        self._export_children(child, inst_dir)
+                else:
+                    folder_name = collision_resolver.get_unique_name(child.name)
+                    child.filesystem_name = folder_name
+                    inst_dir = os.path.join(parent_dir, folder_name)
+                    child.filesystem_path = inst_dir
+                    os.makedirs(ensure_extended_path(inst_dir), exist_ok=True)
 
-                # Export its child instances
-                if has_children:
-                    self._export_children(child, inst_dir)
+                    # Export instance.json
+                    self.metadata_exporter.export_metadata(child, inst_dir)
+                    self._record_instance_summary(child, inst_dir)
+
+                    # Export its child instances
+                    if has_children:
+                        self._export_children(child, inst_dir)
 
     def _record_instance_summary(self, instance: RobloxInstance, full_fs_path: str) -> None:
         rel_path = os.path.relpath(full_fs_path, self.output_dir).replace("\\", "/")

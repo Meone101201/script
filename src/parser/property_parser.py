@@ -14,7 +14,7 @@ from ..model.datatype import (
     Vector2, Vector3, CFrame, Color3, Color3uint8, UDim, UDim2,
     NumberRange, NumberSequence, NumberSequenceKeypoint,
     ColorSequence, ColorSequenceKeypoint, Rect2D, Font,
-    PhysicalProperties, ObjectReference
+    PhysicalProperties, ObjectReference, Faces, Axes
 )
 from ..model.property import RobloxProperty
 from ..utils.logger import ExtractorLogger
@@ -72,7 +72,7 @@ class PropertyParser:
                 z = float(get_child_text(elem, "Z", "0"))
                 return RobloxProperty(name=prop_name, type_name="Vector3", value=Vector3(x, y, z))
 
-            elif tag == "CoordinateFrame":
+            elif tag in ("CoordinateFrame", "CFrame"):
                 x = float(get_child_text(elem, "X", "0"))
                 y = float(get_child_text(elem, "Y", "0"))
                 z = float(get_child_text(elem, "Z", "0"))
@@ -238,6 +238,24 @@ class PropertyParser:
                 else:
                     phys = PhysicalProperties(custom_physics=False)
                 return RobloxProperty(name=prop_name, type_name="PhysicalProperties", value=phys)
+
+            elif tag == "Faces":
+                mask_str = get_child_text(elem, "faces", elem.text or "0").strip()
+                mask = int(mask_str) if mask_str.isdigit() else 0
+                face_names = ["Right", "Top", "Back", "Left", "Bottom", "Front"]
+                active_faces = [name for i, name in enumerate(face_names) if mask & (1 << i)]
+                return RobloxProperty(name=prop_name, type_name="Faces", value=Faces(mask=mask, faces=active_faces))
+
+            elif tag == "Axes":
+                mask_str = get_child_text(elem, "axes", elem.text or "0").strip()
+                mask = int(mask_str) if mask_str.isdigit() else 0
+                axis_names = ["X", "Y", "Z"]
+                active_axes = [name for i, name in enumerate(axis_names) if mask & (1 << i)]
+                return RobloxProperty(name=prop_name, type_name="Axes", value=Axes(mask=mask, axes=active_axes))
+
+            elif tag == "NetAssetRef":
+                val = (elem.text or "").strip()
+                return RobloxProperty(name=prop_name, type_name="NetAssetRef", value=val)
 
             elif tag == "Ref":
                 ref_val = (elem.text or "").strip()

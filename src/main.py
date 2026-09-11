@@ -25,6 +25,7 @@ def run_pipeline(
     strict: bool = False,
     services_filter: Optional[Set[str]] = None,
     rojo_style: bool = False,
+    mode: str = "full",
 ) -> int:
     """
     Executes the end-to-end extraction pipeline.
@@ -33,10 +34,12 @@ def run_pipeline(
     logger = ExtractorLogger(verbose=verbose, strict=strict)
     start_total_time = time.time()
 
+    mode_label = "Simple (Scripts Only)" if mode == "simple" else "Full Hierarchy"
     logger.info("=" * 60)
     logger.info("Roblox RBXLX Extractor (Standalone)")
     logger.info(f"Input : {input_file}")
     logger.info(f"Output: {output_dir}")
+    logger.info(f"Mode  : {mode_label}")
     logger.info("=" * 60)
 
     try:
@@ -61,6 +64,7 @@ def run_pipeline(
             include_properties=include_properties,
             pretty=pretty,
             rojo_style=rojo_style,
+            mode=mode,
         )
         exported_scripts = fs_exporter.export_tree(data_model)
 
@@ -144,12 +148,24 @@ def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
         action="store_true",
         help="Use init.server.lua / init.client.lua / init.lua for scripts that have child instances",
     )
+    parser.add_argument(
+        "--mode",
+        choices=["full", "simple"],
+        default="full",
+        help="Export mode: 'full' (all instances with instance.json) or 'simple' (scripts only, no empty part folders)",
+    )
+    parser.add_argument(
+        "--simple",
+        action="store_true",
+        help="Shortcut for --mode simple (extracts only scripts & code)",
+    )
     return parser.parse_args(argv)
 
 
 def main() -> int:
     args = parse_args()
     services_set = set(s.strip() for s in args.services.split(",")) if args.services else None
+    mode = "simple" if args.simple else args.mode
 
     return run_pipeline(
         input_file=args.input,
@@ -161,6 +177,7 @@ def main() -> int:
         strict=args.strict,
         services_filter=services_set,
         rojo_style=args.rojo_style,
+        mode=mode,
     )
 
 

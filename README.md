@@ -1,19 +1,21 @@
 # Roblox RBXLX Extractor (Standalone)
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://python.org)
-[![Tests](https://img.shields.io/badge/Tests-16%20Passed-brightgreen.svg)]()
+[![Tests](https://img.shields.io/badge/Tests-17%20Passed-brightgreen.svg)]()
+[![GUI](https://img.shields.io/badge/Desktop%20GUI-Modern%20Dark-blueviolet.svg)]()
+[![Executable](https://img.shields.io/badge/Windows%20EXE-Portable-success.svg)]()
 [![Roblox-Studio](https://img.shields.io/badge/Roblox%20Studio-NOT%20Required-success.svg)]()
 
-A high-performance, standalone Python tool to parse Roblox `.rbxlx` XML place files into an in-memory **Roblox Instance Tree** and export the entire project to the local filesystem with separated Lua/Luau scripts (`.server.lua`, `.client.lua`, `.lua`) and rich metadata (`instance.json`).
+A high-performance, standalone tool to parse Roblox `.rbxlx` XML place files (and `.rbxmx` models) into an in-memory **Roblox Instance Tree** and export the entire project to the local filesystem with separated Lua/Luau scripts (`.server.lua`, `.client.lua`, `.lua`) and rich metadata (`instance.json`).
 
-**100% Standalone:** Runs entirely without Roblox Studio, Studio CLI, or any Studio API.
+**100% Standalone:** Runs entirely without Roblox Studio, Studio CLI, or any Studio API. Available both as a **Portable Windows Executable (`.exe`) with a Modern Desktop GUI** and as a **Python CLI / Module**.
 
 ---
 
 ## Architecture Overview
 
 ```
-save.rbxlx
+save.rbxlx / model.rbxmx
     │
     ▼
 ┌────────────────────────────────────────┐
@@ -50,6 +52,7 @@ save.rbxlx
                     ▼
 ┌────────────────────────────────────────┐
 │  Filesystem Exporter                   │
+│  - Full Mode vs. Simple Mode           │
 │  - Path sanitization & collision logic │
 │  - Scripts (.server.lua, .client.lua)  │
 │  - Metadata (instance.json)            │
@@ -57,6 +60,70 @@ save.rbxlx
 │  - Warnings (warnings.log)             │
 └────────────────────────────────────────┘
 ```
+
+---
+
+## Desktop GUI Application (`RBXLX_Extractor.exe`)
+
+For users who prefer a graphical interface or want to run on machines without Python installed, the project includes a standalone Windows executable.
+
+### How to Run:
+- **Direct Executable (No Python Needed)**: Double-click [`RBXLX_Extractor.exe`](file:///d:/rbx/RBXLX_Extractor.exe)
+- **From Source**: Run `python gui.py`
+
+### Modern 2-Column Widescreen UI:
+```text
+┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+│  Roblox RBXLX Extractor                                                                        │
+│  สกัดไฟล์ .rbxlx และ .rbxmx ออกมาเป็นโฟลเดอร์และ Lua/Luau Scripts                               │
+├────────────────────────────────────────┬───────────────────────────────────────────────────────┤
+│  [ ฝั่งซ้าย: เมนูควบคุม & ตั้งค่า ]    │  [ ฝั่งขวา: บันทึกการทำงาน (Live Console Log) ]        │
+│                                        │                                                       │
+│  📁 ไฟล์ต้นทาง (Input File)            │  📋 บันทึกการทำงาน                     [ล้าง Log]     │
+│  [ Path/to/file.rbxlx  ] [Browse...]   │  ┌─────────────────────────────────────────────────┐ │
+│                                        │  │ [PARSER] Opening 'save.rbxlx' (102.0 MB)...    │ │
+│  📂 โฟลเดอร์ปลายทาง (Output Directory) │  │ [PARSER] Successfully parsed 34628 instances... │ │
+│  [ Path/to/output_dir  ] [Browse...]   │  │ [RESOLVER] Resolved 3506/27232 references...   │ │
+│                                        │  │ [EXPORTER] Export completed: 767 scripts...     │ │
+│  ⚙️ เลือกโหมดการทำงาน (2 โหมด):        │  │ Manifest saved to: output\manifest.json         │ │
+│  (o) ⚡ โหมดแบบง่าย (Scripts Only)     │  │                                                 │ │
+│  ( ) 📁 โหมดโครงสร้างเดิม (Full)       │  │                                                 │ │
+│                                        │  │                                                 │ │
+│  [v] จัดรูปแบบ JSON ให้อ่านง่าย        │  │                                                 │ │
+│                                        │  │                                                 │ │
+│  [ 🚀 เริ่มแตกไฟล์ ] [ 📂 เปิดโฟลเดอร์ ]│  │                                                 │ │
+│  สถานะ: พร้อมทำงาน (Ready)             │  │                                                 │ │
+│  [========= Progress Bar =========]    │  └─────────────────────────────────────────────────┘ │
+└────────────────────────────────────────┴───────────────────────────────────────────────────────┘
+```
+
+### The 2 Extraction Modes:
+1. **⚡ โหมดแบบง่าย (Simple Mode - เฉพาะ Scripts & Code)**:
+   - สกัดเฉพาะโค้ดและสคริปต์ (`.server.lua`, `.client.lua`, `.lua`) จัดโครงสร้างตาม Service โฟลเดอร์
+   - **รวดเร็วมาก**: ไม่สร้างโฟลเดอร์พาร์ทที่ว่างเปล่า และไม่สร้างไฟล์ `instance.json` นับหมื่นไฟล์ เหมาะมากสำหรับคนที่ต้องการแค่อ่านโค้ด ศึกษา หรือแก้ไขสคริปต์
+2. **📁 โหมดโครงสร้างเดิม (Full Hierarchy + Metadata)**:
+   - แตกโครงสร้างเต็มรูปแบบ 100% เหมือนใน Studio ทุกชิ้น (Parts, Models, Folders, GUI, Attachments)
+   - มีไฟล์ `instance.json` บันทึก properties/referent อย่างละเอียดทุกชิ้น เหมาะสำหรับนำไปวิเคราะห์หรือ Reconstruct โปรเจกต์กลับในอนาคต
+
+### Built-in Error Checking & Notifications:
+- ⚠️ **Missing Input/Output Warning**: เด้งหน้าต่างแจ้งเตือนทันทีหากยังไม่ได้เลือกไฟล์หรือระบุโฟลเดอร์
+- 🚫 **.rbxl Binary Warning**: หากผู้ใช้เผลอเลือกไฟล์ Binary `.rbxl` แทนที่จะเป็น XML `.rbxlx` โปรแกรมจะเด้งหน้าต่างแนะนำวิธีการ Save as `.rbxlx` จาก Roblox Studio ให้อย่างละเอียด
+- ❌ **Runtime Crash Prevention**: ครอบคลุม Exception ป้องกันการดับเอง พร้อมแสดง Error Message ชัดเจน
+- 📋 **Live Warning Tracker**: แสดงคำเตือน `[WARNING]` ในหน้าต่าง Log แบบ Real-time และสรุปลงใน `warnings.log`
+- ✅ **Success Dialog**: แสดงเวลารวม จำนวน Script ที่ได้ พร้อมปุ่มกดเปิดโฟลเดอร์ผลลัพธ์ทันที
+
+---
+
+## Comparison: GUI Choices vs. CLI Commands
+
+| ตัวเลือกบนหน้าต่างโปรแกรม (GUI) | เทียบเท่ากับคำสั่ง CLI | คำอธิบาย |
+| :--- | :--- | :--- |
+| **📁 ไฟล์ต้นทาง (Input File)** | `"path/to/game.rbxlx"` | ระบุ Path ไฟล์ `.rbxlx` หรือ `.rbxmx` |
+| **📂 โฟลเดอร์ปลายทาง (Output Directory)** | `-o "output/"` หรือ `--output "output/"` | ระบุตำแหน่งโฟลเดอร์สำหรับบันทึกผลลัพธ์ |
+| **⚡ โหมดแบบง่าย (Simple)** | `--simple` หรือ `--mode simple` | สกัดเฉพาะไฟล์ Scripts และโฟลเดอร์ที่เกี่ยวข้อง |
+| **📁 โหมดโครงสร้างเดิม (Full)** | `--mode full` *(ค่าเริ่มต้น)* | แตกทุกชิ้น ทุกโมเดล ทุกพาร์ท พร้อมไฟล์ `instance.json` |
+| **☑️ จัดรูปแบบ JSON ให้อ่านง่าย** | `-p` หรือ `--pretty` | สั่งให้ `instance.json` และ `manifest.json` ย่อหน้าสวยงาม |
+| **⬜ ไม่ติ๊ก JSON ให้อ่านง่าย** | *(ไม่ต้องใส่ flag `--pretty`)* | บันทึก JSON บรรทัดเดียวเพื่อความเร็วสูงสุดและประหยัดพื้นที่ดิสก์ |
 
 ---
 
@@ -81,7 +148,7 @@ save.rbxlx
    - Sibling collision resolver automatically appends `_2`, `_3` for instances sharing identical names under the same parent folder, while preserving the true name in `instance.json`.
    - Automatic `\\?\` prefix support on Windows to bypass the 260-character `MAX_PATH` limit on deeply nested hierarchies.
 6. **Robust Datatype Support**:
-   - Vector2, Vector3, CoordinateFrame (CFrame matrix + position), Color3, Color3uint8, BrickColor, UDim, UDim2, NumberRange, NumberSequence, ColorSequence, Rect2D, Font, PhysicalProperties, Ref, Content, BinaryString, SharedString.
+   - Vector2, Vector3, CoordinateFrame (CFrame matrix + position), OptionalCoordinateFrame, Color3, Color3uint8, BrickColor, UDim, UDim2, NumberRange, NumberSequence, ColorSequence, Rect2D, Font, PhysicalProperties, Ref, Content, BinaryString, SharedString, UniqueId, SecurityCapabilities.
    - Any unknown datatype is stored in `rawProperties` so **zero data is lost**.
 7. **Asset ID Detection**:
    - Detects asset references (`MeshId`, `TextureID`, `SoundId`, `AnimationId`, `Image`, `rbxassetid://`, etc.) and surfaces them in metadata.
@@ -94,10 +161,12 @@ save.rbxlx
 
 ```
 d:/rbx/
+├── RBXLX_Extractor.exe             # Standalone Windows GUI executable (Portable, no Python needed)
+├── gui.py                          # Modern Desktop GUI application source code
 ├── extractor.py                    # Root CLI entry point
 ├── pyproject.toml                  # Package configuration & console script
 ├── requirements.txt                # Development dependencies
-├── README.md                       # Documentation
+├── README.md                       # Comprehensive documentation
 ├── src/
 │   ├── __init__.py
 │   ├── main.py                     # CLI handler and pipeline coordinator
@@ -133,22 +202,29 @@ d:/rbx/
 
 ---
 
-## Installation
+## Installation & Setup
 
-### Requirements
-- Python 3.10, 3.11, or 3.12.
-- No external libraries required for running the extractor.
+### Option 1: Standalone Windows .EXE (Fastest - No Python Needed)
+You can directly run the pre-built standalone executable:
+```powershell
+.\RBXLX_Extractor.exe
+```
+This opens the modern desktop GUI window. It requires **zero Python installation** on the machine.
 
-### Optional: Install as CLI tool
+### Option 2: Run via Python
+- Requires Python 3.10, 3.11, or 3.12.
+- Core CLI extractor has **zero dependencies**.
+- If running the GUI via source, install CustomTkinter:
+  ```powershell
+  pip install customtkinter
+  python gui.py
+  ```
+
+### Option 3: Install as System CLI Tool
 ```powershell
 pip install -e .
 ```
 This enables the `rbxlx-extractor` command directly in your shell.
-
-### Optional: Install test runner
-```powershell
-pip install -r requirements.txt
-```
 
 ---
 
@@ -156,19 +232,24 @@ pip install -r requirements.txt
 
 ### Basic Extraction
 ```powershell
+# Full hierarchy mode (default)
 python extractor.py save.rbxlx --output output/
-```
-Or if installed via pip:
-```powershell
-rbxlx-extractor save.rbxlx -o output/
+
+# Simple mode (scripts only - fast & clean)
+python extractor.py save.rbxlx -o output/ --simple
+
+# With pretty-printed JSON
+python extractor.py save.rbxlx -o output/ --pretty
 ```
 
 ### Options Reference
 
 | Option | Description |
 | :--- | :--- |
-| `input` | Path to input `.rbxlx` file *(required)* |
+| `input` | Path to input `.rbxlx` or `.rbxmx` file *(required)* |
 | `-o`, `--output` | Destination output directory (default: `output/`) |
+| `--mode` | Export mode: `full` (default) or `simple` (scripts only) |
+| `--simple` | Shortcut for `--mode simple` (fast, scripts-only export) |
 | `-v`, `--verbose` | Enable verbose logging and include full instance index in manifest |
 | `-p`, `--pretty` | Pretty-print JSON files (`indent=2`) instead of compact single-line JSON |
 | `--services` | Comma-separated list of top-level services to export (e.g. `--services ServerScriptService,ReplicatedStorage`) |
@@ -177,19 +258,24 @@ rbxlx-extractor save.rbxlx -o output/
 | `--no-scripts`   | Skip extracting script source files (export metadata only) |
 | `--strict`       | Treat any warning or broken reference as a fatal error |
 
-### Examples
+### CLI Examples
 
-#### 1. Extract only game scripts & modules (Fast):
+#### 1. Extract scripts only with pretty JSON (Fast):
+```powershell
+python extractor.py save.rbxlx -o output/ --simple --pretty
+```
+
+#### 2. Extract only game services:
 ```powershell
 python extractor.py save.rbxlx -o output/ --services ServerScriptService,StarterPlayer,ReplicatedStorage --pretty
 ```
 
-#### 2. Full place extraction with pretty JSON:
+#### 3. Full place extraction with pretty JSON:
 ```powershell
 python extractor.py save.rbxlx -o output/ --pretty
 ```
 
-#### 3. Rojo-compatible script structure:
+#### 4. Rojo-compatible script structure:
 ```powershell
 python extractor.py save.rbxlx -o output/ --rojo-style
 ```
@@ -278,21 +364,25 @@ Generated at the root of the output directory:
   "version": 1,
   "source": {
     "file": "save.rbxlx",
-    "sizeBytes": 369455784
+    "sizeBytes": 107003837
   },
-  "exportTimestamp": "2026-09-10T03:44:13.195650+00:00",
+  "exportTimestamp": "2026-09-10T04:03:33.758488+00:00",
   "stats": {
-    "totalInstances": 139018,
-    "totalScripts": 291,
-    "serverScripts": 0,
-    "localScripts": 81,
-    "moduleScripts": 210,
-    "totalProperties": 4962084,
-    "totalReferences": 0,
+    "totalInstances": 34628,
+    "totalScripts": 767,
+    "serverScripts": 278,
+    "localScripts": 235,
+    "moduleScripts": 254,
+    "totalProperties": 1498829,
+    "totalReferences": 27232,
     "totalWarnings": 0
   },
   "services": [
-    "StarterPlayer"
+    "Workspace",
+    "ServerScriptService",
+    "ReplicatedStorage",
+    "StarterPlayer",
+    "StarterGui"
   ],
   "scripts": [
     {
@@ -312,74 +402,34 @@ Generated at the root of the output directory:
 }
 ```
 
-### `warnings.log`
-Records any warnings collected during parsing and reference resolution:
-```
-# RBXLX Extractor Warnings Log
-# Generated: 2026-09-10T03:44:13.197878+00:00
-# Total warnings/errors: 1
-
-## Summary by Category
-- BrokenReference: 1
-
-## Details
-[WARNING][BrokenReference] [Workspace.Car.TargetValue] Property 'Value' references missing referent 'RBX_GHOST'
-```
-
 ---
 
 ## Testing & Quality Assurance
 
-A comprehensive test suite covers all 15 scenarios requested in the specification:
-- Empty place
-- Simple Part & property parsing
-- Nested Model & Folder hierarchies
-- Script types (`.server.lua`, `.client.lua`, `.lua`)
-- Scripts with child instances
-- Duplicate instance names (sibling collisions)
-- Special & illegal filesystem characters (`: * ? " < > | \ /`, control chars)
-- Reserved Windows device names (`CON`, `PRN`, `AUX`, `NUL`, etc.)
-- Trailing spaces and dots
-- Object references & broken reference detection
-- 20+ Roblox datatypes (CFrame, Vector3, Color3, UDim2, NumberSequence, Font, etc.)
-- Unknown instance classes (graceful degradation)
-- Unknown property XML tags (raw data preservation)
-
-### Run Tests:
+A comprehensive test suite covers all scenarios requested in the specification:
 ```powershell
 python -m pytest tests/ -v
 ```
 
 Output:
 ```
-tests/test_datatypes.py::test_complex_datatypes PASSED                   [  6%]
-tests/test_exporter.py::test_full_export_pipeline PASSED                 [ 12%]
-tests/test_parser.py::test_parse_empty_place PASSED                      [ 18%]
-tests/test_parser.py::test_parse_simple_part PASSED                      [ 25%]
-tests/test_parser.py::test_parse_nested_model PASSED                     [ 31%]
-tests/test_references.py::test_object_references_resolution PASSED       [ 37%]
-tests/test_sanitization.py::test_sanitize_basic PASSED                   [ 43%]
-tests/test_sanitization.py::test_sanitize_invalid_characters PASSED      [ 50%]
-tests/test_sanitization.py::test_sanitize_reserved_windows_names PASSED  [ 56%]
-tests/test_sanitization.py::test_sanitize_trailing_spaces_and_dots PASSED [ 62%]
-tests/test_sanitization.py::test_sibling_collision_resolver PASSED       [ 68%]
-tests/test_sanitization.py::test_sibling_collision_with_extensions PASSED [ 75%]
-tests/test_sanitization.py::test_ensure_extended_path PASSED             [ 81%]
-tests/test_special_cases.py::test_duplicate_names_export PASSED          [ 87%]
-tests/test_special_cases.py::test_special_characters_export PASSED       [ 93%]
+tests/test_datatypes.py::test_complex_datatypes PASSED                   [  5%]
+tests/test_exporter.py::test_full_export_pipeline PASSED                 [ 11%]
+tests/test_exporter.py::test_simple_mode_export PASSED                   [ 17%]
+tests/test_parser.py::test_parse_empty_place PASSED                      [ 23%]
+tests/test_parser.py::test_parse_simple_part PASSED                      [ 29%]
+tests/test_parser.py::test_parse_nested_model PASSED                     [ 35%]
+tests/test_references.py::test_object_references_resolution PASSED       [ 41%]
+tests/test_sanitization.py::test_sanitize_basic PASSED                   [ 47%]
+tests/test_sanitization.py::test_sanitize_invalid_characters PASSED      [ 52%]
+tests/test_sanitization.py::test_sanitize_reserved_windows_names PASSED  [ 58%]
+tests/test_sanitization.py::test_sanitize_trailing_spaces_and_dots PASSED [ 64%]
+tests/test_sanitization.py::test_sibling_collision_resolver PASSED       [ 70%]
+tests/test_sanitization.py::test_sibling_collision_with_extensions PASSED [ 76%]
+tests/test_sanitization.py::test_ensure_extended_path PASSED             [ 82%]
+tests/test_special_cases.py::test_duplicate_names_export PASSED          [ 88%]
+tests/test_special_cases.py::test_special_characters_export PASSED       [ 94%]
 tests/test_special_cases.py::test_unknown_class_and_property PASSED      [100%]
 
-============================= 16 passed in 0.60s ==============================
+============================= 17 passed in 0.31s ==============================
 ```
-
----
-
-## Limitations & Fallback Behavior
-
-1. **BinaryMesh / CSG Union Geometry**:
-   - In RBXLX, `UnionOperation` and `MeshPart` geometry data is stored as compressed binary blocks (`PhysicsData`, `InitialData`).
-   - The extractor preserves this raw data in `rawProperties` without attempting lossy re-tessellation.
-2. **Obfuscated Strings**:
-   - When strings contain non-printable control characters, `CleanReader` sanitizes control bytes into safe unicode replacement characters (`\ufffd`) to prevent XML parser fatal errors.
-3. **Broken Object References**:
-   - If an `ObjectValue` or `Ref` property points to a referent that does not exist in the file, it is flagged as `"status": "broken"` and logged in `warnings.log` without halting extraction.
